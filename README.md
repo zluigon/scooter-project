@@ -80,7 +80,7 @@ test("charge", async () => {
 });
 ```
 
-## Class: User
+### Class: User
 When each User object is created in the program (i.e. the constructor), it should be initialized with the following properties:
 - `username`
 - `password`
@@ -91,7 +91,7 @@ Each User should have the following properties
 - `password`: populated by the argument of password
 - `age`: populated by the argument of age
 
-## Class: ScooterApp
+### Class: ScooterApp
 Should include **NO** parameters in the constructor
 
 Each ScooterApp should include the following properties 
