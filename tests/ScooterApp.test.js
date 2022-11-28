@@ -8,6 +8,8 @@ const ScooterApp = require('../src/ScooterApp')
 
 // log in
 
-// add scooter
+// log out
 
-// remove scooter
+// rent scooter
+
+// dock scooter
