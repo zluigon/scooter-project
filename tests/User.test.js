@@ -7,3 +7,7 @@ const User = require('../src/User')
 // test password
 
 // test age
+
+// test login
+
+// test logout
