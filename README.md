@@ -28,36 +28,36 @@ npm run coverage
 The company has provided you with some specs that the front end developers want for their Scooter App. **You should refer back to this page as you build your UML design and code.**
 
 ### Class: Scooter
-This class represents the individual scooters that users will rent from stations. 
-
-When each Scooter object is created in the program (i.e. the constructor), it should be initialized with the following properties:
-- Station the scooter is checked out from
-- User that checked out the Scooter
+This class represents the individual scooters that users will rent from stations. A Scooter is either docked at a station or checked out to a User. Scooters can also be broken or need charging.
 
 Each Scooter should have the following properties
-- `station`: populated by the argument of station 
-- `user`: populated by the argument of user 
-- `serial`: a random number from 1 to 1000
-- `charge`: a random number from 1 to 100 
-- `isBroken`: set to false 
-- `docked`: set to true
+- `station`: string; the station the scooter is located at or `null` if checked out
+- `user`: the User who checked out the Scooter, or null if docked
+- `serial`: a number assigned sequentially from nextSerial
+- `nextSerial`: a static number which starts at 1 and increments each time a new serial number is assigned
+- `charge`: a number from 0 (no charge at all) to 100 (fully charged)
+- `isBroken`: boolean
 
-Each Scooter should have the following methods
+All Scooters are docked, charged, and in good repair initially. The Scooter constructor has one parameter: 
+- the Station the scooter is docked at. 
+
+Your constructor must initialize all of the other properties, too.
+
+Each `Scooter` should have the following methods
 - `rent()`
-    - If `isBroken` is set to `false`, and charge is > 20, then set `docked` to `false` and log to the console, `“Enjoy the ride!”`.
-    - If charge is <= 20, throw an error that messages: `“Scooter low on battery, please charge.”`
-    - If none of these are applicable, you should throw an error that states that: `“Scooter is broken, please send a repair request.”`
+    - If the `Scooter` is charged above 20% and not broken, remove it from its station, check it out to user. 
+    - Otherwise, throw an error scooter needs to charge or scooter needs repair.
+
 - `dock(station)`
-    - Sets the station property of the Scooter to the argument passed in
-        - If no argument is passed in, you should throw an error: `“Docking station required!”`
-    - Set `docked` to `true`
-    - Set `user` to an empty string
-- `recharge()`
-    - This method should update the Scooter’s charge to 100.
+    - Return the scooter to the station. Be sure to clear out the user, so they don’t get charged unfairly!
+
+-`recharge()`
+    - **BONUS**: Set a timer to incrementally update the Scooter’s charge to 100. 
+    - Every so often, log the new percentage of charge.
 
 - `requestRepair()`
-    - Uses a `setInterval` timer to log a message that the repair has been complete
-    - Sets `isBroken` to `false` after the repair has been complete.
+    - **BONUS**: Use a `setInterval` timer to schedule a repair in 5 seconds.
+    - When time elapses, set `isBroken` to false and log repair completed to the console.
 
 **NOTE**: The `recharge()` and `requaestRepair()` methods require that you deliver a message after a certain interval of time. In JavaScript, to simulate waiting for a scooter to charge you can make use of the `setTimeout` call for example in `src/Scooter.js`:
 ```js
@@ -81,53 +81,55 @@ test("charge", async () => {
 ```
 
 ### Class: User
-When each User object is created in the program (i.e. the constructor), it should be initialized with the following properties:
-- `username`
-- `password`
-- `age`
+When a new person downloads the app and registers, a new `User` object is created to store user information in the system.
 
-Each User should have the following properties
-- `username`: populated by the argument of username
-- `password`: populated by the argument of password
-- `age`: populated by the argument of age
+In a real world scenario, this object would also store credit card information, rental history, etc.
+
+Each `User` has the following properties:
+- `username`: String
+- `password`: String
+- `age`: In years
+- `loggedIn`: boolean
+
+`username`, `password`, and `age` are provided to the constructor as arguments. `loggedIn` represents whether the user is currently logged in. A user is NOT logged in when they first register.
+
+Each User has the following methods (each called by ScooterApp):
+- `login(password)`
+    - If password is correct, logs the `User` in. If not, throws incorrect password error.
+- `logout()`
+    - Logs the `User` out.
 
 ### Class: ScooterApp
-Should include **NO** parameters in the constructor
+The `ScooterApp` keeps track of all registered users, plus all the scooters and their status. Many `ScooterApp` methods represent user actions such as logging in or returning a scooter. The `ScooterApp` uses properties and methods of Scooter and User objects.
 
-Each ScooterApp should include the following properties 
-- `stations`: This should contain the stations that the Scooter can be checked out from. **One possible approach**: This can be an object or an array. One possibility is to make it an object with the following keys: Manhattan, Brooklyn, Queens, Bronx, StatenIsland.  Each key should have a value of an empty array.
-- `registeredUsers`: populated by an empty object or array 
-- **BONUS**: A Static property called scooterSessions which should hold an empty array
-- **BONUS**: Each time a ScooterApp object is created/instantiated, it should automatically be added to the scooterSessions array 
+Each `ScooterApp` should include the following properties 
+- `stations`: An object whose keys are the names of station locations, and whose values are arrays of Scooters. You can hard-code these stations in the constructor. There should be at least three. Initially, there are no scooters at any stations.
+- `registeredUsers`: An object whose keys are usernames to store all users 
 
-Each ScooterApp should include the following methods 
-- `register(user)`
-    - Check to see if the user is not already registered, if they ARE, log to the console that they are `“already registered!”`. 
-    - Check to see if the user is older than 17, if they ARE NOT, log to the console that they are `“too young to register!”`
-    - **ONLY** if both of these checks pass: 
-        - Add the user to the `registeredUsers` object
-        - The object key should be the user’s username 
-        - This object key should contain the following key value pairs: 
-            - `password`: the user’s password 
-            `age`: the user’s age 
-            `loggedIn`: false 
-            `accountChange`: 0 
-        - Finally, log to the console that the ”user has been registered”. 
-
-- `logIn(username, password)`
-    - Check to see that the user is in the `registeredUsers` object, and then check to see that their password or matches the password argument, if either of these matches are false, throw an error: `“Username or password is incorrect.”`
-    - If the previous checks pass, mark the correct user in the `registeredUsers` object `loggedIn` property to `true`.
-    - Log to the console that the user has logged in successfully.
-
-- `addScooter(location, scooter)`
-    - **NOTE**: location is a string and scooter is a Scooter object 
-    - Set the Scooter’s `station` property to the `location` argument
-    - Add the `scooter` argument to the stations 
-
-- `removeScooter(scooterToRemove)`
-    - **NOTE**: `scooterToRemove` is a Scooter object 
-    - Identify the `scooterToRemove`’s value for `serial` number 
-    - **BONUS**: Use this serial number to remove the Scooter object from the correct location list 
-        - **NOTE**: You’ll need to do some digging here into nested objects and/or lists
-    - Log to the console that the scooter has successfully been removed 
-    - Throw an error if the scooter serial number is not located - this means that the `scooterToRemove` object has not previously been added.
+Each `ScooterApp` should include the following methods 
+- `registerUser(username, password, age)`
+    - If the user is not already registered AND is 18 or older, then add them as a new registered user. Log to the console that the `user has been registered` and return the user.
+    - If the user cannot be registered, throw an error: `already registered` or `too young to register`.
+- `loginUser(username, password)`
+    - Locate the registered user by name and call its login method. Log to the console that the `user has been logged in`.
+    - If the user cannot be located or if the password is incorrect, then throw an error: `Username or password is incorrect`.
+- `logoutUser(username)`
+    - Locate the registered user and call its logout method. Log `user is logged out` to the console.
+    - If the user cannot be located, throw `no such user is logged in` error
+- `createScooter(station)`
+    - This method is called by the Scooter company’s home office when new scooters are deployed. 
+    - Create a new scooter, add it to the station’s scooter list, and set its station property. Log `created new scooter` to the console. Return the scooter. 
+    - Throws `no such station` error if the station does not exist. 
+- `dockScooter(scooter, station)`
+    - Add the scooter to the station’s scooter list, and dock it. 
+    - Log `scooter is docked` to the console.  
+    - Throws `no such station` error if the station does not exist. 
+    - Throws `scooter already at station` error if the scooter is already there.
+- `rentScooter(scooter, user)`
+    - Locate the given scooter at one of the stations, and remove it from that station. Rent it to the user. Log `scooter is rented` to the console. 
+    - If the scooter is already rented, throw the error `scooter already rented`.
+- `print()`
+    - You will use this handy method when testing your `ScooterApp`.
+    - Log the list of registered users to the console.
+    - Log the list of stations and how many scooters are at each station to the console.
+    - Take a moment to format it nicely so you can read it.
