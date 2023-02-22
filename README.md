@@ -44,7 +44,7 @@ All Scooters are docked, charged, and in good repair initially. The Scooter cons
 Your constructor must initialize all of the other properties, too.
 
 Each `Scooter` should have the following methods
-- `rent()`
+- `rent(user)`
     - If the `Scooter` is charged above 20% and not broken, remove it from its station, check it out to user. 
     - Otherwise, throw an error scooter needs to charge or scooter needs repair.
 
