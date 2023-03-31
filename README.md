@@ -51,7 +51,7 @@ Each `Scooter` should have the following methods
 - `dock(station)`
     - Return the scooter to the station. Be sure to clear out the user, so they don’t get charged unfairly!
 
--`recharge()`
+- `recharge()`
     - **BONUS**: Set a timer to incrementally update the Scooter’s charge to 100. 
     - Every so often, log the new percentage of charge.
 
