@@ -1,5 +1,4 @@
-const User = require('./User')
-const Scooter = require('./Scooter')
+// require the User and Scooter classes - see where they can be used in ScooterApp.js
 
 class ScooterApp {
   // ScooterApp code here
