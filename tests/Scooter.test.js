@@ -15,6 +15,12 @@ describe("scooter object", () => {
 describe("scooter methods", () => {
   // tests here!
 
+  const consoleLog = console.log;
+
+  beforeAll(() => {
+    console.log = jest.fn();
+  });
+
   // rent method
   it("should assign user to scooter", () => {
     scooter.rent(user);
@@ -44,4 +50,8 @@ describe("scooter methods", () => {
     jest.advanceTimersByTime(5000);
     expect(scooter.charge).toBe(100);
   });
+
+  afterAll(() => {
+    console.log = consoleLog;
+  })
 });
