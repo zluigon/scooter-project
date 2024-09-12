@@ -41,7 +41,7 @@ describe("scooter methods", () => {
     jest.useFakeTimers();
     scooter.charge = 0;
     scooter.recharge();
-    jest.advanceTimersByTime(6000);
+    jest.advanceTimersByTime(5000);
     expect(scooter.charge).toBe(100);
   });
 });
