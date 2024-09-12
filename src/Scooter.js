@@ -16,8 +16,9 @@ class Scooter {
 
   rent(user) {
     if (user instanceof User) {
-      if (this.charge >= 20 && this.isBroken === false) {
+      if (this.charge >= 20 && !this.isBroken) {
         this.user = user;
+        this.station = null;
       } else {
         throw new Error("scooter needs to charge or scooter needs repair");
       }
@@ -30,19 +31,20 @@ class Scooter {
   }
 
   async recharge() {
-    while (this.charge <= 100) {
-      setInterval(() => {
+    let chargingInterval = setInterval(() => {
+      if (this.charge < 100) {
         this.charge += 20;
         console.log(this.charge);
-      }, 1000);
-    }
+      } else {
+        clearInterval(chargingInterval);
+      }
+    }, 1000);
   }
 
   async requestRepair() {
-    setTimeout(() => {
-      this.isBroken = false;
-      console.log("repair completed");
-    }, 5000);
+    await new Promise((resovle) => setTimeout(resovle, 5000));
+    this.isBroken = false;
+    console.log("repair completed");
   }
 }
 
