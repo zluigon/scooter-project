@@ -35,8 +35,8 @@ describe("scooter methods", () => {
     await scooter.requestRepair();
     expect(scooter.isBroken).toBe(false);
   }, 6000);
-  // charge method
 
+  // charge method
   it("should charge the scooter", () => {
     jest.useFakeTimers();
     scooter.charge = 0;
