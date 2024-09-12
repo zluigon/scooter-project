@@ -16,7 +16,7 @@ class User {
   }
 
   logout() {
-    this.loggedInoggedIn = false;
+    this.loggedIn = false;
   }
 }
 
