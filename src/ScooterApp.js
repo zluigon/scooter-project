@@ -35,7 +35,7 @@ class ScooterApp {
   logoutUser(username) {
     if (
       Object.keys(this.registeredUsers).includes(username) &&
-      this.registerUser[username].loggedIn
+      this.registeredUsers[username].loggedIn
     ) {
       const user = this.registeredUsers[username];
       user.logout();
@@ -61,7 +61,7 @@ class ScooterApp {
     } else if (this.stations[station].includes(scooter)) {
       throw new Error("scooter already at station");
     }
-
+    scooter.user = null;
     scooter.station = station;
     this.stations[station].push(scooter);
   }
@@ -83,11 +83,11 @@ class ScooterApp {
 
   print() {
     console.log("Registered Users:");
-    console.log(this.registeredUsers);
+    console.log(JSON.stringify(this.registeredUsers));
 
     console.log("Stations : Scooters");
     Object.keys(this.stations).forEach((station) => {
-      console.log(`${station} : ${this.stations[station]}`);
+      console.log(`${station} : ${JSON.stringify(this.stations[station])}`);
     });
   }
 }
