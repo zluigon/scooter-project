@@ -1,13 +1,21 @@
 const Scooter = require("../src/Scooter");
 const User = require("../src/User");
 
-const scooter = new Scooter();
-const user = new User("Joe Bloggs", "test123", 21);
+const consoleLog = console.log;
 
 // typeof scooter === object
 describe("scooter object", () => {
+  const scooter = new Scooter("station1");
   test("Scooter class should create Scooter instance", () => {
     expect(scooter).toBeInstanceOf(Scooter);
+  });
+
+  test("Should assign propeties", () => {
+    expect(scooter.station).toBe("station1");
+    expect(scooter.user).toBe(null);
+    expect(scooter.charge).toBe(100);
+    expect(scooter.isBroken).toBe(false);
+    expect(scooter.serial).toEqual(1);
   });
 });
 
@@ -15,11 +23,13 @@ describe("scooter object", () => {
 describe("scooter methods", () => {
   // tests here!
 
-  const consoleLog = console.log;
-
   beforeAll(() => {
     console.log = jest.fn();
   });
+
+  const scooter = new Scooter("station1");
+  const scooter2 = new Scooter("station1");
+  const user = new User("Joe Bloggs", "test123", 21);
 
   // rent method
   it("should assign user to scooter", () => {
@@ -28,10 +38,21 @@ describe("scooter methods", () => {
     expect(scooter.station).toBe(null);
   });
 
+  it("Rent should throw an error", () => {
+    scooter2.charge = 18;
+    expect(() => {
+      scooter2.rent(user);
+    }).toThrow("scooter needs to charge or scooter needs repair");
+  });
+
+  it("Rent should throw generic error", () => {
+    expect(scooter2.rent).toThrow(Error);
+  });
+
   // dock method
   it("should update station and remove user", () => {
-    scooter.dock("s1");
-    expect(scooter.station).toBe("s1");
+    scooter.dock("station2");
+    expect(scooter.station).toBe("station2");
     expect(scooter.user).toBe(null);
   });
 
@@ -43,7 +64,7 @@ describe("scooter methods", () => {
   }, 6000);
 
   // charge method
-  it("should charge the scooter", () => {
+  it("should charge the scooter", async () => {
     jest.useFakeTimers();
     scooter.charge = 0;
     scooter.recharge();
@@ -53,5 +74,5 @@ describe("scooter methods", () => {
 
   afterAll(() => {
     console.log = consoleLog;
-  })
+  });
 });

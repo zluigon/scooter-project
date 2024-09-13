@@ -10,38 +10,35 @@ class ScooterApp {
   }
 
   registerUser(username, password, age) {
-    if (!Object.keys(this.registeredUsers).includes(username) && age >= 18) {
-      const user = new User(username, password, age);
-      this.registeredUsers[username] = user;
-      console.log("user has been registered");
-      return user;
-    } else if (age < 18) {
-      throw new Error("too young to register");
-    } else {
+    if (Object.keys(this.registeredUsers).includes(username)) {
       throw new Error("already registered");
     }
+
+    if (age < 18) {
+      throw new Error("too young to register");
+    }
+    
+    const user = new User(username, password, age);
+    this.registeredUsers[username] = user;
+    console.log("user has been registered");
+    return user;
   }
 
   loginUser(username, password) {
-    if (Object.keys(this.registeredUsers).includes(username)) {
-      const user = this.registeredUsers[username];
-      user.login(password);
-      console.log("user has been logged in");
-    } else {
+    if (!Object.keys(this.registeredUsers).includes(username)) {
       throw new Error("username or password is incorrect");
     }
+    const user = this.registeredUsers[username];
+    user.login(password);
+    console.log("user has been logged in");
   }
 
   logoutUser(username) {
-    if (
-      Object.keys(this.registeredUsers).includes(username) &&
-      this.registeredUsers[username].loggedIn
-    ) {
-      const user = this.registeredUsers[username];
-      user.logout();
-    } else {
+    if (!this.registeredUsers[username].loggedIn) {
       throw new Error("no such user is logged in");
     }
+    const user = this.registeredUsers[username];
+    user.logout();
   }
 
   createScooter(station) {

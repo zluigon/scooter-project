@@ -15,14 +15,11 @@ class Scooter {
   static nextSerial = 1;
 
   rent(user) {
-    if (user instanceof User) {
-      if (this.charge >= 20 && !this.isBroken) {
-        this.user = user;
-        this.station = null;
-      } else {
-        throw new Error("scooter needs to charge or scooter needs repair");
-      }
+    if (this.charge < 20 || this.isBroken) {
+      throw new Error("scooter needs to charge or scooter needs repair");
     }
+    this.user = user;
+    this.station = null;
   }
 
   dock(station) {
@@ -31,7 +28,7 @@ class Scooter {
   }
 
   async recharge() {
-    let chargingInterval = setInterval(() => {
+    const chargingInterval = setInterval(() => {
       if (this.charge < 100) {
         this.charge += 20;
         console.log(this.charge);

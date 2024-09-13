@@ -8,11 +8,10 @@ class User {
   }
 
   login(password) {
-    if (password === this.password) {
-      this.loggedIn = true;
-    } else {
+    if (!password || password !== this.password) {
       throw new Error("incorrect password");
     }
+    this.loggedIn = true;
   }
 
   logout() {
@@ -20,4 +19,4 @@ class User {
   }
 }
 
-module.exports = User
+module.exports = User;
